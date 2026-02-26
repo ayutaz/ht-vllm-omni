@@ -1,0 +1,112 @@
+<div class="card bg-base-200 shadow-xl">
+    <div class="card-body">
+        <p class="text-base-content/70 mb-6">
+            Blend two voices using SLERP (Spherical Linear Interpolation).
+            Upload two reference audio files, adjust the blend ratio, and generate speech.
+        </p>
+
+        <form hx-post="/api/interpolate"
+              hx-encoding="multipart/form-data"
+              hx-target="#interpolation-result"
+              hx-swap="innerHTML"
+              hx-indicator="#interpolate-loading">
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Left Column: Inputs -->
+                <div class="space-y-4">
+                    <!-- Voice A & B -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold">Voice A</span>
+                            </label>
+                            <input type="file"
+                                   name="audio_a"
+                                   accept="audio/*"
+                                   class="file-input file-input-bordered file-input-sm w-full"
+                                   required>
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold">Voice B</span>
+                            </label>
+                            <input type="file"
+                                   name="audio_b"
+                                   accept="audio/*"
+                                   class="file-input file-input-bordered file-input-sm w-full"
+                                   required>
+                        </div>
+                    </div>
+
+                    <!-- SLERP Ratio Slider -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">SLERP Ratio</span>
+                            <span class="label-text-alt font-mono" id="ratio-display">0.50</span>
+                        </label>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-base-content/50">A (0.0)</span>
+                            <input type="range"
+                                   name="ratio"
+                                   min="0" max="1" step="0.05" value="0.5"
+                                   class="range range-primary flex-1"
+                                   oninput="document.getElementById('ratio-display').textContent = parseFloat(this.value).toFixed(2)">
+                            <span class="text-xs text-base-content/50">B (1.0)</span>
+                        </div>
+                    </div>
+
+                    <!-- Text Input -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Synthesis Text</span>
+                        </label>
+                        <textarea name="text"
+                                  class="textarea textarea-bordered textarea-primary h-24"
+                                  placeholder="Enter text to synthesize..."
+                                  required></textarea>
+                    </div>
+
+                    <!-- Language -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Language</span>
+                        </label>
+                        <select name="language" class="select select-bordered w-full">
+                            {% for lang in languages %}
+                            <option value="{{ lang }}" {% if lang == "Auto" %}selected{% endif %}>{{ lang }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn btn-primary btn-lg gap-2 w-full sm:w-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M8 12h8"/>
+                        </svg>
+                        Generate Blended Voice
+                    </button>
+                </div>
+
+                <!-- Right Column: Output -->
+                <div>
+                    <div id="interpolation-result">
+                        <div class="bg-base-300 rounded-lg p-4 min-h-[200px] flex items-center justify-center">
+                            <p class="text-base-content/40 text-sm">
+                                Blended audio will appear here
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Loading Indicator -->
+        <div id="interpolate-loading" class="htmx-indicator mt-4">
+            <div class="flex items-center gap-3">
+                <span class="loading loading-spinner loading-md text-primary"></span>
+                <span class="text-base-content/60">Extracting embeddings and generating blended speech...</span>
+            </div>
+        </div>
+    </div>
+</div>

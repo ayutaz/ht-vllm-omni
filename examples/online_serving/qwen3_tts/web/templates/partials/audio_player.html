@@ -1,0 +1,50 @@
+<div class="space-y-4">
+    <!-- Success Alert -->
+    <div class="alert alert-success">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <span>{{ status }}</span>
+    </div>
+
+    <!-- Audio Player -->
+    <div class="bg-base-300 rounded-lg p-4">
+        <h3 class="font-semibold text-lg mb-3">Generated Audio</h3>
+        <audio controls class="w-full" preload="auto">
+            <source src="{{ audio_uri }}" type="audio/wav">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    {% if interpolation_info %}
+    <!-- Interpolation Stats -->
+    <div class="bg-base-300 rounded-lg p-4">
+        <h3 class="font-semibold text-lg mb-3">Interpolation Info</h3>
+        <div class="stats stats-vertical sm:stats-horizontal shadow w-full">
+            <div class="stat">
+                <div class="stat-title">Voice A Norm</div>
+                <div class="stat-value text-lg font-mono">{{ interpolation_info.norm_a }}</div>
+            </div>
+            <div class="stat">
+                <div class="stat-title">Voice B Norm</div>
+                <div class="stat-value text-lg font-mono">{{ interpolation_info.norm_b }}</div>
+            </div>
+            <div class="stat">
+                <div class="stat-title">SLERP Ratio</div>
+                <div class="stat-value text-lg font-mono">{{ interpolation_info.ratio }}</div>
+                <div class="stat-desc">0 = A, 1 = B</div>
+            </div>
+            <div class="stat">
+                <div class="stat-title">Blended Norm</div>
+                <div class="stat-value text-lg font-mono">{{ interpolation_info.norm_blended }}</div>
+            </div>
+            <div class="stat">
+                <div class="stat-title">Cosine Similarity</div>
+                <div class="stat-value text-lg font-mono">{{ interpolation_info.cosine_similarity }}</div>
+                <div class="stat-desc">A vs B</div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>

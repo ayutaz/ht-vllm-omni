@@ -1,0 +1,89 @@
+<div class="card bg-base-200 shadow-xl">
+    <div class="card-body">
+        <p class="text-base-content/70 mb-6">
+            Upload a reference audio file to extract a speaker embedding vector (ECAPA-TDNN).
+            The embedding can be used in Tab 2 for voice cloning or downloaded as JSON.
+        </p>
+
+        <form hx-post="/api/extract-embedding"
+              hx-encoding="multipart/form-data"
+              hx-target="#embedding-result"
+              hx-swap="innerHTML"
+              hx-indicator="#extract-loading">
+
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                <!-- Left Column: Audio Upload (wider) -->
+                <div class="lg:col-span-3 space-y-4">
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text text-lg font-semibold">Reference Audio</span>
+                        </label>
+
+                        <!-- File Upload -->
+                        <div class="drop-zone rounded-lg p-6 text-center border-2 border-dashed border-base-content/20 hover:border-primary transition-colors"
+                             id="audio-drop-zone">
+                            <input type="file"
+                                   name="audio"
+                                   accept="audio/*"
+                                   class="file-input file-input-bordered file-input-primary w-full max-w-md"
+                                   id="audio-file-input"
+                                   required>
+                            <p class="mt-2 text-sm text-base-content/50">
+                                Drag & drop an audio file here, or click to browse
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Microphone Recording -->
+                    <div class="flex items-center gap-3">
+                        <button type="button"
+                                class="btn btn-outline btn-secondary btn-sm gap-2"
+                                id="mic-record-btn"
+                                onclick="toggleRecording(this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                                <line x1="12" y1="19" x2="12" y2="23"/>
+                                <line x1="8" y1="23" x2="16" y2="23"/>
+                            </svg>
+                            <span id="mic-btn-text">Record from Microphone</span>
+                        </button>
+                        <span id="recording-indicator" class="hidden">
+                            <span class="recording-dot"></span>
+                            <span class="text-sm text-error">Recording...</span>
+                        </span>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn btn-primary btn-lg gap-2 w-full sm:w-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        Extract Embedding
+                    </button>
+                </div>
+
+                <!-- Right Column: Results -->
+                <div class="lg:col-span-2">
+                    <div id="embedding-result">
+                        <div class="bg-base-300 rounded-lg p-4 min-h-[200px] flex items-center justify-center">
+                            <p class="text-base-content/40 text-sm">
+                                Upload audio and click "Extract Embedding" to see results
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Loading Indicator -->
+        <div id="extract-loading" class="htmx-indicator mt-4">
+            <div class="flex items-center gap-3">
+                <span class="loading loading-spinner loading-md text-primary"></span>
+                <span class="text-base-content/60">Extracting embedding...</span>
+            </div>
+        </div>
+    </div>
+</div>

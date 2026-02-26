@@ -1,0 +1,52 @@
+/* Voice Cloning Web UI — Custom Styles */
+
+/* HTMX loading indicator */
+.htmx-indicator {
+    display: none;
+}
+.htmx-request .htmx-indicator,
+.htmx-request.htmx-indicator {
+    display: flex;
+}
+
+/* Recording indicator: pulsing red dot */
+.recording-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: oklch(var(--er));
+    margin-right: 6px;
+    animation: pulse-recording 1s ease-in-out infinite;
+}
+
+@keyframes pulse-recording {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* Drop zone hover effect */
+.drop-zone.drag-over {
+    border-color: oklch(var(--p));
+    background-color: oklch(var(--p) / 0.05);
+}
+
+/* Audio player styling */
+audio {
+    border-radius: 0.5rem;
+}
+
+/* Stat cards: smaller text for interpolation info */
+.stats .stat-value {
+    font-size: 1rem;
+}
+
+/* Smooth tab content transitions */
+#tab-content {
+    animation: fadeIn 0.15s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

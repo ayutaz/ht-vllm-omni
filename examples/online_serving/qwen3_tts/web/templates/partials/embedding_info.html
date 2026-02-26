@@ -1,0 +1,56 @@
+{% if success %}
+<div class="space-y-4">
+    <!-- Success Alert -->
+    <div class="alert alert-success">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <span>
+            {% if from_recording %}
+            Embedding extracted from recording!
+            {% else %}
+            Embedding extracted successfully!
+            {% endif %}
+        </span>
+    </div>
+
+    <!-- Embedding Info Card -->
+    <div class="bg-base-300 rounded-lg p-4">
+        <h3 class="font-semibold text-lg mb-3">Embedding Info</h3>
+        <div class="grid grid-cols-2 gap-2 text-sm">
+            <div class="text-base-content/60">Dimension:</div>
+            <div class="font-mono">{{ info.dimension }}</div>
+
+            <div class="text-base-content/60">L2 Norm:</div>
+            <div class="font-mono">{{ info.l2_norm }}</div>
+
+            <div class="text-base-content/60">Min:</div>
+            <div class="font-mono">{{ info.min }}</div>
+
+            <div class="text-base-content/60">Max:</div>
+            <div class="font-mono">{{ info.max }}</div>
+
+            <div class="text-base-content/60">Mean:</div>
+            <div class="font-mono">{{ info.mean }}</div>
+        </div>
+    </div>
+
+    <!-- Download -->
+    <a href="/api/download-embedding"
+       class="btn btn-outline btn-sm gap-2 w-full"
+       download="speaker_embedding.json">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download Embedding JSON
+    </a>
+
+    <!-- Session status -->
+    <div class="text-xs text-base-content/40">
+        Embedding saved to session. It will be automatically used in Tab 2.
+    </div>
+</div>
+{% endif %}

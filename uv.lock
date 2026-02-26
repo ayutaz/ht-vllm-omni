@@ -1125,6 +1125,15 @@ wheels = [
 ]
 
 [[package]]
+name = "itsdangerous"
+version = "2.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/9c/cb/8ac0172223afbccb63986cc25049b154ecfb5e85932587206f42317be31d/itsdangerous-2.2.0.tar.gz", hash = "sha256:e0050c0b7da1eea53ffaf149c0cfbb5c6e2e2b69c4bef22c81fa6eb73e5f6173", size = 54410, upload-time = "2024-04-16T21:28:15.614Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/04/96/92447566d16df59b2a776c0fb82dbc4d9e07cd95062562af01e408583fc4/itsdangerous-2.2.0-py3-none-any.whl", hash = "sha256:c6242fc49e35958c8b15141343aa660db5fc54d4f13a1db01a3f5891b98700ef", size = 16234, upload-time = "2024-04-16T21:28:14.499Z" },
+]
+
+[[package]]
 name = "jinja2"
 version = "3.1.6"
 source = { registry = "https://pypi.org/simple" }
@@ -4076,16 +4085,26 @@ docs = [
     { name = "regex" },
     { name = "ruff" },
 ]
+web = [
+    { name = "fastapi" },
+    { name = "itsdangerous" },
+    { name = "jinja2" },
+    { name = "python-multipart" },
+    { name = "uvicorn" },
+]
 
 [package.metadata]
 requires-dist = [
     { name = "accelerate", specifier = ">=1.12.0" },
     { name = "aenum", specifier = ">=3.1.16" },
     { name = "diffusers", specifier = ">=0.36.0" },
+    { name = "fastapi", marker = "extra == 'web'", specifier = ">=0.115.0" },
     { name = "gradio", specifier = ">=6.6.0" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "huggingface-hub", specifier = ">=1.4.1" },
     { name = "imageio", extras = ["ffmpeg"], marker = "extra == 'dev'", specifier = ">=0.6.0" },
+    { name = "itsdangerous", marker = "extra == 'web'", specifier = ">=2.2.0" },
+    { name = "jinja2", marker = "extra == 'web'", specifier = ">=3.1.0" },
     { name = "librosa", specifier = ">=0.11.0" },
     { name = "mkdocs", marker = "extra == 'docs'", specifier = ">=1.5.0" },
     { name = "mkdocs-api-autonav", marker = "extra == 'docs'" },
@@ -4111,6 +4130,7 @@ requires-dist = [
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0.0" },
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.21.0" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=4.0.0" },
+    { name = "python-multipart", marker = "extra == 'web'", specifier = ">=0.0.20" },
     { name = "regex", marker = "extra == 'docs'" },
     { name = "resampy", specifier = ">=0.4.3" },
     { name = "ruff", marker = "extra == 'docs'" },
@@ -4124,8 +4144,9 @@ requires-dist = [
     { name = "torchvision", specifier = ">=0.25.0", index = "https://download.pytorch.org/whl/cu126" },
     { name = "tqdm", specifier = ">=4.67.3" },
     { name = "transformers", specifier = ">=5.2.0" },
+    { name = "uvicorn", marker = "extra == 'web'", specifier = ">=0.34.0" },
 ]
-provides-extras = ["dev", "docs"]
+provides-extras = ["dev", "docs", "web"]
 
 [[package]]
 name = "watchdog"

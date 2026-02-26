@@ -1,0 +1,98 @@
+<div class="card bg-base-200 shadow-xl">
+    <div class="card-body">
+        <p class="text-base-content/70 mb-2">
+            Generate speech with a cloned voice. Voice source priority:
+        </p>
+        <ol class="list-decimal list-inside text-base-content/60 text-sm mb-6 space-y-1">
+            <li><strong>Embedding JSON</strong> uploaded below</li>
+            <li><strong>Tab 1 embedding</strong> (auto-linked via session)</li>
+            <li><strong>Reference audio</strong> (direct x-vector cloning)</li>
+        </ol>
+
+        <form hx-post="/api/generate-speech"
+              hx-encoding="multipart/form-data"
+              hx-target="#speech-result"
+              hx-swap="innerHTML"
+              hx-indicator="#speech-loading">
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Left Column: Inputs -->
+                <div class="space-y-4">
+                    <!-- Text Input -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Synthesis Text</span>
+                        </label>
+                        <textarea name="text"
+                                  class="textarea textarea-bordered textarea-primary h-28"
+                                  placeholder="Enter text to synthesize..."
+                                  required></textarea>
+                    </div>
+
+                    <!-- Language -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Language</span>
+                        </label>
+                        <select name="language" class="select select-bordered w-full">
+                            {% for lang in languages %}
+                            <option value="{{ lang }}" {% if lang == "Auto" %}selected{% endif %}>{{ lang }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Reference Audio (optional) -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Reference Audio</span>
+                            <span class="label-text-alt text-base-content/50">Optional</span>
+                        </label>
+                        <input type="file"
+                               name="ref_audio"
+                               accept="audio/*"
+                               class="file-input file-input-bordered file-input-sm w-full">
+                    </div>
+
+                    <!-- Embedding JSON (optional) -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Embedding JSON</span>
+                            <span class="label-text-alt text-base-content/50">Optional (highest priority)</span>
+                        </label>
+                        <input type="file"
+                               name="embedding_json"
+                               accept=".json"
+                               class="file-input file-input-bordered file-input-sm w-full">
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn btn-primary btn-lg gap-2 w-full sm:w-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        Generate Speech
+                    </button>
+                </div>
+
+                <!-- Right Column: Output -->
+                <div>
+                    <div id="speech-result">
+                        <div class="bg-base-300 rounded-lg p-4 min-h-[200px] flex items-center justify-center">
+                            <p class="text-base-content/40 text-sm">
+                                Generated audio will appear here
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Loading Indicator -->
+        <div id="speech-loading" class="htmx-indicator mt-4">
+            <div class="flex items-center gap-3">
+                <span class="loading loading-spinner loading-md text-primary"></span>
+                <span class="text-base-content/60">Generating speech...</span>
+            </div>
+        </div>
+    </div>
+</div>
