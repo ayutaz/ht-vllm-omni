@@ -66,3 +66,27 @@ function sendRecording(blob) {
         values: formData,
     });
 }
+
+/* ── Drag & Drop for the audio drop zone ── */
+
+function initDropZone() {
+    const zone = document.getElementById('audio-drop-zone');
+    const input = document.getElementById('audio-file-input');
+    if (!zone || !input) return;
+
+    ['dragenter', 'dragover'].forEach(evt =>
+        zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.add('drag-over'); })
+    );
+    ['dragleave', 'drop'].forEach(evt =>
+        zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.remove('drag-over'); })
+    );
+    zone.addEventListener('drop', e => {
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            const dt = new DataTransfer();
+            dt.items.add(files[0]);
+            input.files = dt.files;
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    });
+}
