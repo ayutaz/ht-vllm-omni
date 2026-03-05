@@ -35,11 +35,6 @@ Qwen3-TTS の speaker embedding を活用した声の操作テクニック集。
 ## セットアップ
 
 ```bash
-# Web UI 起動
-uv run python examples/online_serving/qwen3_tts/web/app.py \
-    --tts-model Qwen/Qwen3-TTS-12Hz-1.7B-Base \
-    --encoder-model marksverdhei/Qwen3-Voice-Embedding-12Hz-1.7B
-
 # Gradio UI 起動
 uv run python examples/online_serving/qwen3_tts/gradio_voice_cloning.py \
     --encoder-model marksverdhei/Qwen3-Voice-Embedding-12Hz-1.7B \
@@ -49,18 +44,18 @@ uv run python examples/online_serving/qwen3_tts/gradio_voice_cloning.py \
 
 ## クイックリファレンス
 
-| # | テクニック | Web UI | Gradio | CLI | Python API |
-|---|----------|--------|--------|-----|------------|
-| 1 | Voice Cloning | Tab 1→2 | Tab 1→2 | `extract` | AutoModel |
-| 2 | ベクトル演算 | - | Tab 5 | - | numpy |
-| 3 | 声の平均化 | - | Tab 5 | - | numpy |
-| 4 | 性別変換 | - | Tab 6 | - | Direction Vector |
-| 5 | ピッチ変更 | - | Tab 6 | - | Direction Vector |
-| 6 | 声のブレンド | Tab 3 | Tab 3 | `interpolate` / `pipeline` | slerp() |
-| 7 | 感情空間 | Tab 4 | - | `emotion_analysis.py` | 4サブコマンド |
-| 8 | セマンティック検索 | - | Tab 4 | - | find_similar() |
-| 9 | スタンドアロンモデル | - | - | - | AutoModel |
-| 10 | ONNX | - | - | - | onnxruntime |
+| # | テクニック | Gradio | CLI | Python API |
+|---|----------|--------|-----|------------|
+| 1 | Voice Cloning | Tab 1→2 | `extract` | AutoModel |
+| 2 | ベクトル演算 | Tab 5 | - | numpy |
+| 3 | 声の平均化 | Tab 5 | - | numpy |
+| 4 | 性別変換 | Tab 6 | - | Direction Vector |
+| 5 | ピッチ変更 | Tab 6 | - | Direction Vector |
+| 6 | 声のブレンド | Tab 3 | `interpolate` / `pipeline` | slerp() |
+| 7 | 感情空間 | - | `emotion_analysis.py` | 4サブコマンド |
+| 8 | セマンティック検索 | Tab 4 | - | find_similar() |
+| 9 | スタンドアロンモデル | - | - | AutoModel |
+| 10 | ONNX | - | - | onnxruntime |
 
 ---
 
@@ -87,10 +82,10 @@ ECAPA-TDNN は約12Mパラメータの軽量な話者エンコーダで、音声
 
 ICL（In-Context Learning）モードでは参照音声の音声トークンも入力に含めるため、より高い話者類似度が得られる。
 
-### Web UI での操作（HTMX Web UI）
+### Gradio UI での操作
 
-1. **Tab 1（Embedding 抽出）**: 音声ファイルをアップロードまたはドラッグ&ドロップして「Embedding 抽出」をクリック。次元数・L2ノルム・最小値・最大値が表示される。JSON ダウンロードも可能。
-2. **Tab 2（Voice Cloning TTS）**: テキストを入力し、参照音声（ICL/x_vector）またはタブ1のembedding を使って音声を生成。参照テキストを入力すると ICL モードになる。
+1. **Tab 1（Embedding 抽出）**: 音声をアップロードして「Embedding抽出」をクリック。結果はセッション state に保持され、Tab 2 から参照できる。JSON ダウンロードも可能。
+2. **Tab 2（ボイスクローンTTS）**: embedding の読み込み優先順位は、アップロード JSON > Tab 1 の state > 参照音声。参照テキストを入力すると ICL モードになる。
 
 ### CLI での操作
 
@@ -323,7 +318,7 @@ result = base + intensity * pitch_up_direction
 | `0.5` | 声A と声B の中間 |
 | `1.0` | 完全に声B |
 
-### Web UI（Tab 3）での操作
+### Gradio Tab 3 での操作
 
 声A と声B の音声をアップロード → SLERP 比率スライダーで調整 → 合成テキストを入力して生成。
 
@@ -420,9 +415,9 @@ python emotion_analysis.py apply \
 | `0.8-1.0` | はっきりした感情表現 |
 | `1.5+` | 強調された感情（不自然になる可能性、EOS問題注意） |
 
-### Web UI: Emotion Lab（Tab 4）
+### 感情 Direction Vector の利用
 
-`emotion_directions.json` をアップロード → 感情・alpha・テキストを指定して生成。
+`emotion_directions.json` を生成後、`apply` コマンドで任意のテキストに感情を適用して音声生成できる。
 
 ---
 
@@ -560,12 +555,13 @@ await fetch('/api/synthesize', {
 
 ### 現在のプロジェクトでの対応状況
 
-ht-vllm-omni プロジェクトでは ONNX モデルを直接サポートする機能は未実装。ただし `/api/synthesize` エンドポイントは JSON REST API のため、クライアント側で ONNX 推論した embedding をそのまま送信できる:
+ht-vllm-omni プロジェクトでは ONNX モデルを直接サポートする機能は未実装。ただし vLLM の `/v1/audio/speech` エンドポイントは `speaker_embedding` パラメータを受け付けるため、クライアント側で ONNX 推論した embedding をそのまま送信できる:
 
 ```bash
-curl -X POST http://localhost:8001/api/synthesize \
+curl -X POST http://localhost:8000/v1/audio/speech \
     -H "Content-Type: application/json" \
-    -d '{"text": "こんにちは", "speaker_embedding": [0.123, -0.456, ...], "language": "Japanese"}' \
+    -H "Authorization: Bearer EMPTY" \
+    -d '{"model": "Qwen/Qwen3-TTS-12Hz-1.7B-Base", "input": "こんにちは", "speaker_embedding": [0.123, -0.456, ...], "task_type": "Base", "response_format": "wav"}' \
     --output output.wav
 ```
 
