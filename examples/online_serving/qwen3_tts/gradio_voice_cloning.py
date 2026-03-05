@@ -194,7 +194,10 @@ class _TTSWrapper:
         AutoProcessor.register(Qwen3TTSConfig, Qwen3TTSProcessor)
 
         model = AutoModel.from_pretrained(model_path, **kwargs)
-        processor = AutoProcessor.from_pretrained(model_path, fix_mistral_regex=True)
+        try:
+            processor = AutoProcessor.from_pretrained(model_path, fix_mistral_regex=True)
+        except TypeError:
+            processor = AutoProcessor.from_pretrained(model_path)
         gen_defaults = getattr(model, "generate_config", {}) or {}
         return cls(model=model, processor=processor, generate_defaults=gen_defaults)
 
@@ -207,8 +210,11 @@ class _TTSWrapper:
     def _wrap_text(text: str) -> str:
         return f"<|im_start|>assistant\n{text}<|im_end|>\n<|im_start|>assistant\n"
 
+    # Keys that must NOT be overridden by generation_config.json
+    _PROTECTED_KEYS = frozenset({"max_new_tokens"})
+
     def _gen_kwargs(self, **overrides) -> dict[str, Any]:
-        defaults = dict(
+        hard_defaults = dict(
             non_streaming_mode=False,
             do_sample=True,
             top_k=50,
@@ -222,8 +228,15 @@ class _TTSWrapper:
             max_new_tokens=2048,
         )
         merged = {}
-        for k, v in defaults.items():
-            merged[k] = overrides.get(k) or self.generate_defaults.get(k, v)
+        for k, v in hard_defaults.items():
+            user_val = overrides.pop(k, None)
+            if user_val is not None:
+                merged[k] = user_val
+            elif k not in self._PROTECTED_KEYS and k in self.generate_defaults:
+                merged[k] = self.generate_defaults[k]
+            else:
+                merged[k] = v
+        merged.update(overrides)
         return merged
 
     @torch.no_grad()

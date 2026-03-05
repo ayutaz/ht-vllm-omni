@@ -10,7 +10,7 @@
        hx-target="#tab-content"
        hx-swap="innerHTML"
        hx-on::after-request="switchTab(this)"
-       >1. Extract Embedding</a>
+       >1. エンベディング抽出</a>
     <a role="tab"
        class="tab"
        id="tab-btn-cloning"
@@ -18,7 +18,7 @@
        hx-target="#tab-content"
        hx-swap="innerHTML"
        hx-on::after-request="switchTab(this)"
-       >2. Voice Cloning TTS</a>
+       >2. ボイスクローン</a>
     <a role="tab"
        class="tab"
        id="tab-btn-interpolation"
@@ -26,7 +26,15 @@
        hx-target="#tab-content"
        hx-swap="innerHTML"
        hx-on::after-request="switchTab(this)"
-       >3. Voice Interpolation</a>
+       >3. ボイス補間</a>
+    <a role="tab"
+       class="tab"
+       id="tab-btn-emotion-lab"
+       hx-get="/tab/emotion-lab"
+       hx-target="#tab-content"
+       hx-swap="innerHTML"
+       hx-on::after-request="switchTab(this)"
+       >4. 感情ラボ</a>
 </div>
 
 <!-- Tab Content -->

@@ -35,6 +35,16 @@ from transformers.modeling_flash_attention_utils import FlashAttentionKwargs
 from transformers.modeling_layers import GradientCheckpointingLayer
 from transformers.modeling_outputs import BaseModelOutputWithPast
 from transformers.modeling_rope_utils import ROPE_INIT_FUNCTIONS, dynamic_rope_update
+
+# Compatibility: newer transformers removed "default" from ROPE_INIT_FUNCTIONS
+if "default" not in ROPE_INIT_FUNCTIONS:
+    def _rope_init_default(config, device=None):
+        base = config.rope_theta
+        dim = int(getattr(config, "head_dim", config.hidden_size // config.num_attention_heads))
+        inv_freq = 1.0 / (base ** (torch.arange(0, dim, 2, dtype=torch.int64).float().to(device) / dim))
+        return inv_freq, 1.0
+
+    ROPE_INIT_FUNCTIONS["default"] = _rope_init_default
 from transformers.modeling_utils import ALL_ATTENTION_FUNCTIONS, PreTrainedModel
 from transformers.processing_utils import Unpack
 from transformers.utils import ModelOutput, auto_docstring, logging

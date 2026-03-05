@@ -1,8 +1,8 @@
 <div class="card bg-base-200 shadow-xl">
     <div class="card-body">
         <p class="text-base-content/70 mb-6">
-            Upload a reference audio file to extract a speaker embedding vector (ECAPA-TDNN).
-            The embedding can be used in Tab 2 for voice cloning or downloaded as JSON.
+            リファレンス音声をアップロードして、話者エンベディングベクトル（ECAPA-TDNN）を抽出します。
+            抽出したエンベディングはタブ2のボイスクローンに自動で使用されるほか、JSONとしてダウンロードできます。
         </p>
 
         <form hx-post="/api/extract-embedding"
@@ -16,7 +16,7 @@
                 <div class="lg:col-span-3 space-y-4">
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text text-lg font-semibold">Reference Audio</span>
+                            <span class="label-text text-lg font-semibold">リファレンス音声</span>
                         </label>
 
                         <!-- File Upload -->
@@ -29,7 +29,7 @@
                                    id="audio-file-input"
                                    required>
                             <p class="mt-2 text-sm text-base-content/50">
-                                Drag & drop an audio file here, or click to browse
+                                音声ファイルをドラッグ＆ドロップ、またはクリックして選択
                             </p>
                         </div>
                     </div>
@@ -46,11 +46,11 @@
                                 <line x1="12" y1="19" x2="12" y2="23"/>
                                 <line x1="8" y1="23" x2="16" y2="23"/>
                             </svg>
-                            <span id="mic-btn-text">Record from Microphone</span>
+                            <span id="mic-btn-text">マイクで録音</span>
                         </button>
                         <span id="recording-indicator" class="hidden">
                             <span class="recording-dot"></span>
-                            <span class="text-sm text-error">Recording...</span>
+                            <span class="text-sm text-error">録音中...</span>
                         </span>
                     </div>
 
@@ -61,7 +61,7 @@
                             <polyline points="17 8 12 3 7 8"/>
                             <line x1="12" y1="3" x2="12" y2="15"/>
                         </svg>
-                        Extract Embedding
+                        エンベディング抽出
                     </button>
                 </div>
 
@@ -70,7 +70,7 @@
                     <div id="embedding-result">
                         <div class="bg-base-300 rounded-lg p-4 min-h-[200px] flex items-center justify-center">
                             <p class="text-base-content/40 text-sm">
-                                Upload audio and click "Extract Embedding" to see results
+                                音声をアップロードして「エンベディング抽出」をクリックしてください
                             </p>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
         <div id="extract-loading" class="htmx-indicator mt-4">
             <div class="flex items-center gap-3">
                 <span class="loading loading-spinner loading-md text-primary"></span>
-                <span class="text-base-content/60">Extracting embedding...</span>
+                <span class="text-base-content/60">エンベディングを抽出中...</span>
             </div>
         </div>
     </div>

@@ -1,8 +1,8 @@
 <div class="card bg-base-200 shadow-xl">
     <div class="card-body">
         <p class="text-base-content/70 mb-6">
-            Blend two voices using SLERP (Spherical Linear Interpolation).
-            Upload two reference audio files, adjust the blend ratio, and generate speech.
+            SLERP（球面線形補間）で2つの声をブレンドします。
+            2つのリファレンス音声をアップロードし、ブレンド比率を調整して音声を生成します。
         </p>
 
         <form hx-post="/api/interpolate"
@@ -18,7 +18,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="form-control">
                             <label class="label">
-                                <span class="label-text font-semibold">Voice A</span>
+                                <span class="label-text font-semibold">ボイス A</span>
                             </label>
                             <input type="file"
                                    name="audio_a"
@@ -28,7 +28,7 @@
                         </div>
                         <div class="form-control">
                             <label class="label">
-                                <span class="label-text font-semibold">Voice B</span>
+                                <span class="label-text font-semibold">ボイス B</span>
                             </label>
                             <input type="file"
                                    name="audio_b"
@@ -41,7 +41,7 @@
                     <!-- SLERP Ratio Slider -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text font-semibold">SLERP Ratio</span>
+                            <span class="label-text font-semibold">SLERP 比率</span>
                             <span class="label-text-alt font-mono" id="ratio-display">0.50</span>
                         </label>
                         <div class="flex items-center gap-3">
@@ -58,18 +58,18 @@
                     <!-- Text Input -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text font-semibold">Synthesis Text</span>
+                            <span class="label-text font-semibold">合成テキスト</span>
                         </label>
                         <textarea name="text"
                                   class="textarea textarea-bordered textarea-primary h-24"
-                                  placeholder="Enter text to synthesize..."
+                                  placeholder="合成するテキストを入力..."
                                   required></textarea>
                     </div>
 
                     <!-- Language -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text font-semibold">Language</span>
+                            <span class="label-text font-semibold">言語</span>
                         </label>
                         <select name="language" class="select select-bordered w-full">
                             {% for lang in languages %}
@@ -84,7 +84,7 @@
                             <circle cx="12" cy="12" r="10"/>
                             <path d="M8 12h8"/>
                         </svg>
-                        Generate Blended Voice
+                        ブレンド音声を生成
                     </button>
                 </div>
 
@@ -93,7 +93,7 @@
                     <div id="interpolation-result">
                         <div class="bg-base-300 rounded-lg p-4 min-h-[200px] flex items-center justify-center">
                             <p class="text-base-content/40 text-sm">
-                                Blended audio will appear here
+                                ブレンドされた音声がここに表示されます
                             </p>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
         <div id="interpolate-loading" class="htmx-indicator mt-4">
             <div class="flex items-center gap-3">
                 <span class="loading loading-spinner loading-md text-primary"></span>
-                <span class="text-base-content/60">Extracting embeddings and generating blended speech...</span>
+                <span class="text-base-content/60">エンベディング抽出とブレンド音声を生成中...</span>
             </div>
         </div>
     </div>

@@ -8,30 +8,30 @@
         </svg>
         <span>
             {% if from_recording %}
-            Embedding extracted from recording!
+            録音からエンベディングを抽出しました！
             {% else %}
-            Embedding extracted successfully!
+            エンベディングの抽出に成功しました！
             {% endif %}
         </span>
     </div>
 
     <!-- Embedding Info Card -->
     <div class="bg-base-300 rounded-lg p-4">
-        <h3 class="font-semibold text-lg mb-3">Embedding Info</h3>
+        <h3 class="font-semibold text-lg mb-3">エンベディング情報</h3>
         <div class="grid grid-cols-2 gap-2 text-sm">
-            <div class="text-base-content/60">Dimension:</div>
+            <div class="text-base-content/60">次元数:</div>
             <div class="font-mono">{{ info.dimension }}</div>
 
-            <div class="text-base-content/60">L2 Norm:</div>
+            <div class="text-base-content/60">L2 ノルム:</div>
             <div class="font-mono">{{ info.l2_norm }}</div>
 
-            <div class="text-base-content/60">Min:</div>
+            <div class="text-base-content/60">最小値:</div>
             <div class="font-mono">{{ info.min }}</div>
 
-            <div class="text-base-content/60">Max:</div>
+            <div class="text-base-content/60">最大値:</div>
             <div class="font-mono">{{ info.max }}</div>
 
-            <div class="text-base-content/60">Mean:</div>
+            <div class="text-base-content/60">平均値:</div>
             <div class="font-mono">{{ info.mean }}</div>
         </div>
     </div>
@@ -45,12 +45,12 @@
             <polyline points="7 10 12 15 17 10"/>
             <line x1="12" y1="15" x2="12" y2="3"/>
         </svg>
-        Download Embedding JSON
+        エンベディング JSON をダウンロード
     </a>
 
     <!-- Session status -->
     <div class="text-xs text-base-content/40">
-        Embedding saved to session. It will be automatically used in Tab 2.
+        エンベディングをセッションに保存しました。タブ2で自動的に使用されます。
     </div>
 </div>
 {% endif %}

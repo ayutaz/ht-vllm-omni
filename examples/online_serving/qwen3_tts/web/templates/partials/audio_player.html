@@ -10,39 +10,72 @@
 
     <!-- Audio Player -->
     <div class="bg-base-300 rounded-lg p-4">
-        <h3 class="font-semibold text-lg mb-3">Generated Audio</h3>
+        <h3 class="font-semibold text-lg mb-3">生成された音声</h3>
         <audio controls class="w-full" preload="auto">
             <source src="{{ audio_uri }}" type="audio/wav">
-            Your browser does not support the audio element.
+            お使いのブラウザは audio 要素に対応していません。
         </audio>
     </div>
 
     {% if interpolation_info %}
     <!-- Interpolation Stats -->
     <div class="bg-base-300 rounded-lg p-4">
-        <h3 class="font-semibold text-lg mb-3">Interpolation Info</h3>
+        <h3 class="font-semibold text-lg mb-3">補間情報</h3>
         <div class="stats stats-vertical sm:stats-horizontal shadow w-full">
             <div class="stat">
-                <div class="stat-title">Voice A Norm</div>
+                <div class="stat-title">ボイス A ノルム</div>
                 <div class="stat-value text-lg font-mono">{{ interpolation_info.norm_a }}</div>
             </div>
             <div class="stat">
-                <div class="stat-title">Voice B Norm</div>
+                <div class="stat-title">ボイス B ノルム</div>
                 <div class="stat-value text-lg font-mono">{{ interpolation_info.norm_b }}</div>
             </div>
             <div class="stat">
-                <div class="stat-title">SLERP Ratio</div>
+                <div class="stat-title">SLERP 比率</div>
                 <div class="stat-value text-lg font-mono">{{ interpolation_info.ratio }}</div>
                 <div class="stat-desc">0 = A, 1 = B</div>
             </div>
             <div class="stat">
-                <div class="stat-title">Blended Norm</div>
+                <div class="stat-title">ブレンド ノルム</div>
                 <div class="stat-value text-lg font-mono">{{ interpolation_info.norm_blended }}</div>
             </div>
             <div class="stat">
-                <div class="stat-title">Cosine Similarity</div>
+                <div class="stat-title">コサイン類似度</div>
                 <div class="stat-value text-lg font-mono">{{ interpolation_info.cosine_similarity }}</div>
                 <div class="stat-desc">A vs B</div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if emotion_info %}
+    <!-- Emotion Direction Stats -->
+    <div class="bg-base-300 rounded-lg p-4">
+        <h3 class="font-semibold text-lg mb-3">感情方向情報</h3>
+        <div class="stats stats-vertical sm:stats-horizontal shadow w-full">
+            <div class="stat">
+                <div class="stat-title">感情</div>
+                <div class="stat-value text-lg">{{ emotion_info.emotion }}</div>
+            </div>
+            <div class="stat">
+                <div class="stat-title">Alpha</div>
+                <div class="stat-value text-lg font-mono">{{ emotion_info.alpha }}</div>
+            </div>
+            <div class="stat">
+                <div class="stat-title">通常ノルム</div>
+                <div class="stat-value text-lg font-mono">{{ emotion_info.normal_norm }}</div>
+            </div>
+            <div class="stat">
+                <div class="stat-title">方向ノルム</div>
+                <div class="stat-value text-lg font-mono">{{ emotion_info.direction_norm }}</div>
+            </div>
+            <div class="stat">
+                <div class="stat-title">変更後ノルム</div>
+                <div class="stat-value text-lg font-mono">{{ emotion_info.modified_norm }}</div>
+            </div>
+            <div class="stat">
+                <div class="stat-title">音声長</div>
+                <div class="stat-value text-lg font-mono">{{ emotion_info.duration }}</div>
             </div>
         </div>
     </div>

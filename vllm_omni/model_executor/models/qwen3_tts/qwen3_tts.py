@@ -533,10 +533,13 @@ class Qwen3TTSModel:
         if not isinstance(model, Qwen3TTSForConditionalGeneration):
             raise TypeError(f"AutoModel returned {type(model)}, expected Qwen3TTSForConditionalGeneration. ")
 
-        processor = AutoProcessor.from_pretrained(
-            pretrained_model_name_or_path,
-            fix_mistral_regex=True,
-        )
+        try:
+            processor = AutoProcessor.from_pretrained(
+                pretrained_model_name_or_path,
+                fix_mistral_regex=True,
+            )
+        except TypeError:
+            processor = AutoProcessor.from_pretrained(pretrained_model_name_or_path)
 
         generate_defaults = model.generate_config
         return cls(model=model, processor=processor, generate_defaults=generate_defaults)
